@@ -68,7 +68,7 @@ def take_guess():
             continue
 
         break
-    return list(user_guess)
+    return user_guess
 
 
 # This is the main function to run the game
