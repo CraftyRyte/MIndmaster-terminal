@@ -16,12 +16,7 @@ def starter():
 
 
 def secret_code_generator():
-    r1 = random.randint(0, 3)
-    r2 = random.randint(0, 3)
-    r3 = random.randint(0, 3)
-    r4 = random.randint(0, 3)
-    code = [COLORS[r1], COLORS[r2], COLORS[r3], COLORS[r4]]
-    return code
+    return random.choices(COLORS, k=4)
 
 
 def check_if_code_in_correct_pos(guess, code):
@@ -45,7 +40,11 @@ def check_if_code_in_correct_pos(guess, code):
             code_counts[code[i]] = code_counts.get(code[i], 0) + 1
 
     for i in range(4):
-        if guess[i] != code[i] and guess[i] in code_counts and code_counts[guess[i]] > 0:
+        if (
+            guess[i] != code[i]
+            and guess[i] in code_counts
+            and code_counts[guess[i]] > 0
+        ):
             incorrect_pos += 1
             code_counts[guess[i]] -= 1
 
