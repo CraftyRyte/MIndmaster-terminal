@@ -1,4 +1,4 @@
-"""This program is a game called mind master"""
+""""This program is a game called mind master"""
 
 import random
 
@@ -16,13 +16,12 @@ def starter():
 
 
 def secret_code_generator():
-    """
-    Generates a secret code consisting of 4 random colors from a predefined list of COLORS.
-
-    Returns:
-    list: A list of 4 randomly selected colors from COLORS.
-    """
-    return random.sample(COLORS, 4)
+    r1 = random.randint(0, 3)
+    r2 = random.randint(0, 3)
+    r3 = random.randint(0, 3)
+    r4 = random.randint(0, 3)
+    code = [COLORS[r1], COLORS[r2], COLORS[r3], COLORS[r4]]
+    return code
 
 
 def check_if_code_in_correct_pos(guess, code):
@@ -36,15 +35,19 @@ def check_if_code_in_correct_pos(guess, code):
     Returns:
     A tuple containing the number of correct positions and the number of incorrect positions.
     """
+    code_counts = {}
     correct_pos = 0
     incorrect_pos = 0
     for i in range(4):
-        if (
-            guess[i] == code[i]
-        ):  # if the thing at i index of guess is equal to i index of code (means it is in correct pos)
+        if guess[i] == code[i]:
             correct_pos += 1
-        if (guess[i] in code) and (guess[i] != code[i]):  # to calculate incorrect pos
+        else:
+            code_counts[code[i]] = code_counts.get(code[i], 0) + 1
+
+    for i in range(4):
+        if guess[i] != code[i] and guess[i] in code_counts and code_counts[guess[i]] > 0:
             incorrect_pos += 1
+            code_counts[guess[i]] -= 1
 
     return correct_pos, incorrect_pos
 
@@ -58,31 +61,21 @@ def take_guess():
     """
     while True:  # To keep asking for guesses until a valid one is entered
         user_guess = input("Enter your guess: ").upper()
-        user_guess_list = []
-        for i in user_guess:
-            user_guess_list.append(i)
 
         # check if the user input is valid
-        if len(user_guess_list) != 4:
-            print("Please enter exactly 4 colors.\n")
-            continue
-        if (
-            user_guess_list[0] not in COLORS
-            or user_guess_list[1] not in COLORS
-            or user_guess_list[2] not in COLORS
-            or user_guess_list[3] not in COLORS
-        ):  # Just bruteforced it because did not know how to do it regularly
+        if len(user_guess) != 4 or not all(c in COLORS for c in user_guess):
             print("Invalid color code.\n")
             continue
 
         break
-    return user_guess_list
+    return list(user_guess)
 
 
 # This is the main function to run the game
 def main():
     print(starter())
     code = secret_code_generator()
+    print(code)
     no_of_guesses = 0
     isRunning = True
 
